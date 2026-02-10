@@ -4,7 +4,7 @@ namespace ChickenSystem.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ClientController
+    public class ClientController:ControllerBase
     {
 
     }
