@@ -1,17 +1,19 @@
 using ChickenSystem.Dto;
 using ChickenSystem.Models;
-namespace ChickenSystem.Services;
 
+namespace ChickenSystem.Services;
 
 public interface IFoodService
 {
     public List<FoodDto> GetFoods();
+    public List<FoodDto> GetByName(string name);
     public FoodDto? GetById(int id);
     public FoodDto Post(CreateFoodDto createFoodDto);
     public FoodDto? Put(int id, UpdateFoodDto updateFoodDto);
     public bool Delete(int id);
 }
-public class FoodService:IFoodService
+
+public class FoodService : IFoodService
 {
     private static readonly List<Food> FoodList =
     [
@@ -23,12 +25,11 @@ public class FoodService:IFoodService
             ImageUrl = "imagen"
         },
     ];
-    
+
     public FoodService()
     {
-        
     }
-    
+
     public List<FoodDto> GetFoods()
     {
         var foods = FoodList.Select(g => new FoodDto
@@ -37,7 +38,18 @@ public class FoodService:IFoodService
             Name = g.Name,
             Description = g.Description,
             ImageUrl = g.ImageUrl
+        }).ToList();
+        return foods;
+    }
 
+    public List<FoodDto> GetByName(string name)
+    {
+        var foods = FoodList.Where(g => g.Name.Contains(name)).Select(g => new FoodDto
+        {
+            Id = g.Id,
+            Name = g.Name,
+            Description = g.Description,
+            ImageUrl = g.ImageUrl
         }).ToList();
         return foods;
     }
@@ -49,10 +61,11 @@ public class FoodService:IFoodService
         {
             return null;
         }
+
         var foodDto = new FoodDto
         {
             Id = food.Id,
-            Name =food.Name,
+            Name = food.Name,
             Description = food.Description,
             ImageUrl = food.ImageUrl
         };
@@ -67,16 +80,14 @@ public class FoodService:IFoodService
             Name = createFoodDto.Name,
             Description = createFoodDto.Description,
             ImageUrl = createFoodDto.ImageUrl,
-
         };
         FoodList.Add(newFood);
         var foodDto = new FoodDto
         {
-            Id= newFood.Id,
+            Id = newFood.Id,
             Name = newFood.Name,
             Description = newFood.Description,
             ImageUrl = newFood.ImageUrl
-
         };
         return foodDto;
     }
@@ -88,6 +99,7 @@ public class FoodService:IFoodService
         {
             return null;
         }
+
         food.Name = updateFoodDto.Name;
         food.Description = updateFoodDto.Description;
         food.ImageUrl = updateFoodDto.ImageUrl;
@@ -109,27 +121,9 @@ public class FoodService:IFoodService
         {
             return false;
         }
+
         FoodList.Remove(food);
 
         return true;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

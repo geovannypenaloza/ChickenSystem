@@ -1,5 +1,4 @@
 using ChickenSystem.Dto;
-using ChickenSystem.Models;
 using ChickenSystem.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +9,7 @@ namespace ChickenSystem.Controllers
     public class FoodController : ControllerBase
     {
         private readonly IFoodService _foodService;
-        public FoodController(IFoodService foodService)//constructor
+        public FoodController(IFoodService foodService)
         {
             _foodService = foodService;
         }
@@ -19,6 +18,11 @@ namespace ChickenSystem.Controllers
         {
             return Ok(_foodService.GetFoods());
         } 
+        [HttpGet("search/{name}")]
+        public ActionResult<List<FoodDto>> GetByName(string name)
+        {
+            return Ok(_foodService.GetByName(name));
+        }
         [HttpGet("{id}")]
         public ActionResult<FoodDto> GetById(int id)
         {

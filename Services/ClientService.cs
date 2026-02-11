@@ -5,14 +5,14 @@ namespace ChickenSystem.Services;
 
 public interface IClientService
 {
-
     public List<ClientDto> Get();
     public ClientDto? GetById(int id);
     public ClientDto Post(CreateClientDto createClientDto);
     public ClientDto? Put(int id, UpdateClientDto updateClientDto);
     public bool Delete(int id);
 }
-public class ClientService:IClientService
+
+public class ClientService : IClientService
 {
     private static List<Client> _clientList =
     [
@@ -27,7 +27,6 @@ public class ClientService:IClientService
 
     public ClientService()
     {
-        
     }
 
 
@@ -40,7 +39,7 @@ public class ClientService:IClientService
             Name = g.Name,
             Phone = g.Phone
         }).ToList();
-        
+
         return clientList;
     }
 
@@ -51,6 +50,7 @@ public class ClientService:IClientService
         {
             return null;
         }
+
         var clientdto = new ClientDto
         {
             Id = client.Id,
@@ -61,14 +61,14 @@ public class ClientService:IClientService
         return clientdto;
     }
 
-    public ClientDto Post(CreateClientDto clientpostdto)
+    public ClientDto Post(CreateClientDto createClientDto)
     {
         var newClient = new Client
         {
             Id = _clientList.Max(g => g.Id) + 1,
-            Name = clientpostdto.Name,
-            Email = clientpostdto.Email,
-            Phone = clientpostdto.Phone
+            Name = createClientDto.Name,
+            Email = createClientDto.Email,
+            Phone = createClientDto.Phone
         };
         _clientList.Add(newClient);
         var clientDto = new ClientDto
@@ -81,23 +81,25 @@ public class ClientService:IClientService
         return clientDto;
     }
 
-    public ClientDto? Put(int id, UpdateClientDto clientputdto)
+    public ClientDto? Put(int id, UpdateClientDto updateClientDto)
     {
         var client = _clientList.FirstOrDefault(c => c.Id == id);
         if (client == null)
         {
             return null;
         }
-        client.Name = clientputdto.Name;
-        client.Email = clientputdto.Email;
-        client.Phone = clientputdto.Phone;
+
+        client.Name = updateClientDto.Name;
+        client.Email = updateClientDto.Email;
+        client.Phone = updateClientDto.Phone;
+
         var result = new ClientDto()
         {
             Name = client.Name,
-            Email = clientputdto.Email,
-            Phone = clientputdto.Phone
+            Email = client.Email,
+            Phone = client.Phone
         };
-            return result;
+        return result;
     }
 
     public bool Delete(int id)
@@ -107,6 +109,7 @@ public class ClientService:IClientService
         {
             return false;
         }
+
         _clientList.Remove(client);
 
         return true;
