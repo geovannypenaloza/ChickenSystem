@@ -1,4 +1,6 @@
 
+using ChickenSystem.Services;
+
 namespace ChickenSystem
 {
     public class Program
@@ -13,6 +15,9 @@ namespace ChickenSystem
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IChickenService, ChickenService>();
+            builder.Services.AddScoped<IClientService,ClientService>();
+            builder.Services.AddScoped<IFoodService, FoodService>();
 
             var app = builder.Build();
 

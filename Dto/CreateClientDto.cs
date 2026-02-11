@@ -1,4 +1,4 @@
-﻿namespace ClientSystem.Dto
+﻿namespace ChickenSystem.Dto
 {
     public class CreateClientDto
     {

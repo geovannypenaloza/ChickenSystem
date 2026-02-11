@@ -1,4 +1,4 @@
-﻿namespace ClientSystem.Models
+﻿namespace ChickenSystem.Models
 {
     public class Client
     {

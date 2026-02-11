@@ -1,98 +1,53 @@
-﻿using ClientSystem.Dto;
-using ClientSystem.Models;
+﻿
+using ChickenSystem.Dto;
+using ChickenSystem.Models;
+using ChickenSystem.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ClientSystem.Controllers
+namespace ChickenSystem.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class ClientController : ControllerBase
     {
-        public static List<Client> ClientList = new List<Client>()
+        private readonly IClientService _clientService;
+        public ClientController(IClientService clientService)
         {
-            new Client
-            {
-                Id = 1,
-                Name = "geovanny",
-                Email = "geovanny@hotmail.com",
-                Phone = "movistar",
-             }
-        };
-        // GET: api/Client
+            _clientService = clientService;
+        }
+        
         [HttpGet]
-        public ActionResult<List<Client>> Get()
+        public ActionResult<List<ClientDto>> Get()
         {
-            var clientgetdot = ClientList.Select(g => new ClientDto
-            {
-                Email = g.Email,
-                Id = g.Id,
-                Name = g.Name,
-                Phone = g.Phone
-            }).ToList();
-            return Ok(clientgetdot);
-        } //get 2 id
+            return Ok(_clientService.Get());
+        } 
+        
+        
         [HttpGet("{id}")]
         public ActionResult<ClientDto> GetById(int id)
         {
-            var Client = ClientList.FirstOrDefault(c => c.Id == id);
-            if (Client == null)
-            {
-                return NotFound();
-            }
-            var clientgetdot = new ClientDto
-            {
-                Id = Client.Id,
-                Name = Client.Name,
-                Email = Client.Email,
-                Phone = Client.Phone
-            };
-            return Ok(clientgetdot);
-        }//post create sin ID en createClientDto
+            var result = _clientService.GetById(id);
+            return Ok(result);
+        }//post 
+        
         [HttpPost]
         public ActionResult<ClientDto> Post(CreateClientDto clientpostdto)
         {
-            var newClient = new Client
-            {
-                Id = ClientList.Max(g => g.Id) + 1,
-                Name = clientpostdto.Name,
-                Email = clientpostdto.Email,
-                Phone = clientpostdto.Phone
-            };
-            ClientList.Add(newClient);
-            var clientdot = new ClientDto
-            {
-                Id = newClient.Id,
-                Name = newClient.Name,
-                Email = newClient.Email,
-                Phone = newClient.Phone
-            };
-            return Ok(clientdot);
+            var result = _clientService.Post(clientpostdto);
+            return Ok(result);
         }
         //put update
         [HttpPut("{id}")]
         public ActionResult<ClientDto> Put(int id, UpdateClientDto clientputdto)
         {
-            var client = ClientList.FirstOrDefault(c => c.Id == id);
-            if (client == null)
-            {
-                return NotFound();
-            }
-            client.Name = clientputdto.Name;
-            client.Email = clientputdto.Email;
-            client.Phone = clientputdto.Phone;
-            return NoContent();
+            var  result = _clientService.Put(id, clientputdto);
+            return  Ok(result);
         }//delete
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            var client = ClientList.FirstOrDefault(c => c.Id == id);
-            if (client == null)
-            {
-                return NotFound();
-            }
-            ClientList.Remove(client);
-
-            return NoContent();
+            var  result = _clientService.Delete(id);
+            return Ok(result);
         }
     }
 }
