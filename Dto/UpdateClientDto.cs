@@ -1,6 +1,6 @@
-﻿namespace ClientSystem.Models
+﻿namespace ClientSystem.Dto
 {
-    public class Client
+    public class UpdateClientDto
     {
         public int Id { get; set; }
         public required string Name { get; set; }

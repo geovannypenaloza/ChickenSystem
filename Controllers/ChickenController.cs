@@ -80,7 +80,7 @@ namespace ChickenSystem.Controllers
             };
             return Ok(chickengetdot);
         }
-
+        //post create sin ID en createChickenDto
         [HttpPost]
         public ActionResult<ChickenDto> Post(CreateChickenDto chickenpostdto)
         {
@@ -114,7 +114,7 @@ namespace ChickenSystem.Controllers
 
             };
             return Ok(chickendot);
-        }
+        }//put update
         [HttpPut("{id}")]
         public ActionResult<ChickenDto> Put(int id, UpdateChickenDto chickenputdto)
         {
@@ -133,7 +133,7 @@ namespace ChickenSystem.Controllers
             chicken.Sex = chickenputdto.Sex;
             chicken.Sing = chickenputdto.Sing;
             return NoContent();
-        }
+        }//delete
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {

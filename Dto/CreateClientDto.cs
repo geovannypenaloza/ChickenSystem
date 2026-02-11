@@ -1,8 +1,8 @@
-﻿namespace ClientSystem.Models
+﻿namespace ClientSystem.Dto
 {
-    public class Client
+    public class CreateClientDto
     {
-        public int Id { get; set; }
+        //sin ID en create
         public required string Name { get; set; }
         public required string Email { get; set; }
         public required string Phone { get; set; }
