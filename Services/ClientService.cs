@@ -1,4 +1,4 @@
-using ChickenSystem.Dto;
+using ChickenSystem.Dto.Client;
 using ChickenSystem.Models;
 
 namespace ChickenSystem.Services;

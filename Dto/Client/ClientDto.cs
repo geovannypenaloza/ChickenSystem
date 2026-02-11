@@ -1,10 +1,11 @@
-﻿namespace ChickenSystem.Dto
+﻿namespace ChickenSystem.Dto.Client
 {
-    public class UpdateClientDto
+    public class ClientDto
     {
         public int Id { get; set; }
         public required string Name { get; set; }
         public required string Email { get; set; }
         public required string Phone { get; set; }
+
     }
 }
