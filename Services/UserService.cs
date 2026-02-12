@@ -1,4 +1,5 @@
-﻿using ChickenSystem.Dto.User;
+﻿using ChickenSystem.Data;
+using ChickenSystem.Dto.User;
 using ChickenSystem.Models;
 
 namespace ChickenSystem.Services;
@@ -15,21 +16,15 @@ public interface IUserService
 
 public class UserService : IUserService
 {
-    private static readonly List<User> UserList =
-    [
-        new User
-        {
-            Id = 1,
-            Name = "geovanny",
-            Age = 20,
-            Gender = "male"
-        },
-    ];
-    public UserService() { }
+    private readonly  AppDbContext _db;
+    public UserService(AppDbContext db)
+    {
+        _db = db;
+    }
 
     public List<UserDto> GetUsers()
     {
-        var users = UserList.Select(g => new UserDto
+        var users = _db.Users.Select(g => new UserDto
         {
             Id = g.Id,
             Name = g.Name,
@@ -41,7 +36,7 @@ public class UserService : IUserService
 
     public List<UserDto> GetByName(string name)
     {
-        var foods = UserList.Where(g => g.Name.Contains(name)).Select(g => new UserDto
+        var foods = _db.Users.Where(g => g.Name.Contains(name)).Select(g => new UserDto
         {
             Id = g.Id,
             Name = g.Name,
@@ -53,7 +48,7 @@ public class UserService : IUserService
 
     public UserDto? GetById(int id)
     {
-        var user = UserList.FirstOrDefault(c => c.Id == id);
+        var user = _db.Users.FirstOrDefault(c => c.Id == id);
         if (user == null)
         {
             return null;
@@ -73,12 +68,13 @@ public class UserService : IUserService
     {
         var newUser = new User
         {
-            Id = UserList.Max(g => g.Id) + 1,
+            Id = 0,
             Name = createUserDto.Name,
             Age = createUserDto.Age,
             Gender = createUserDto.Gender
         };
-        UserList.Add(newUser);
+        _db.Users.Add(newUser);
+        _db.SaveChanges();
         var userDto = new UserDto
         {
             Id = newUser.Id,
@@ -91,7 +87,7 @@ public class UserService : IUserService
 
     public UserDto? Put(int id, UpdateUserDto updateUserDto)
     {
-        User? user = UserList.FirstOrDefault(c => c.Id == id);
+        User? user = _db.Users.FirstOrDefault(c => c.Id == id);
         if (user == null)
         {
             return null;
@@ -99,6 +95,7 @@ public class UserService : IUserService
         user.Name = updateUserDto.Name;
         user.Age = updateUserDto.Age;
         user.Gender = updateUserDto.Gender;
+        _db.SaveChanges();
         var result = new UserDto()
         {
             Id = user.Id,
@@ -111,12 +108,12 @@ public class UserService : IUserService
 
     public bool Delete(int id)
     {
-        var user = UserList.FirstOrDefault(c => c.Id == id);
+        var user = _db.Users.FirstOrDefault(c => c.Id == id);
         if (user == null)
         {
             return false;
         }
-        UserList.Remove(user);
+        _db.Users.Remove(user);
         return true;
     }
 }

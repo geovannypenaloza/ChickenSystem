@@ -1,6 +1,7 @@
+using ChickenSystem.Data;
 using ChickenSystem.Dto.Chicken;
 using ChickenSystem.Models;
-using Microsoft.AspNetCore.Mvc;
+
 
 namespace ChickenSystem.Services;
 
@@ -8,52 +9,25 @@ public interface IChickenService
 {
     public List<ChickenDto> GetChickens();
     public ChickenDto? GetById(int id);
-    public ChickenDto Post(CreateChickenDto chickenpostdto);
-    public ChickenDto? Put(int id, UpdateChickenDto chickenputdto);
+    public ChickenDto Post(CreateChickenDto createChickenDto);
+    public ChickenDto? Put(int id, UpdateChickenDto updateChickenDto);
     public bool Delete(int id);
 }
 
 public class ChickenService:IChickenService
 {
-    private static List<Chicken> ChickenList =
-    [
-        new Chicken
-        {
-            Id = 1,
-            Name = "ave",
-            Date = DateTime.Now,
-            Height = 10,
-            Weight = 15,
-            Color = "gris",
-            Age = 15,
-            Breed = "carioca",
-            Sex = "hembra",
-            Sing = true,
-        },
-
-        new Chicken
-        {
-            Id = 1,
-            Name = "pollo",
-            Date = DateTime.Now,
-            Height = 10,
-            Weight = 15,
-            Color = "gris",
-            Age = 15,
-            Breed = "carioca",
-            Sex = "hembra",
-            Sing = true,
-        }
-    ];
-    public ChickenService()
+    private readonly AppDbContext _db;
+    
+    public ChickenService(AppDbContext db)
     {
-        
+        _db = db;
     }
-
+    
 
     public List<ChickenDto> GetChickens()
     {
-        var chickens = ChickenList.Select(g => new ChickenDto
+        
+        var chickens = _db.Chickens.Select(g => new ChickenDto
         {
             Id = g.Id,
             Name = g.Name,
@@ -72,7 +46,7 @@ public class ChickenService:IChickenService
 
     public ChickenDto? GetById(int id)
     {
-        var chicken = ChickenList.FirstOrDefault(c => c.Id == id);
+        var chicken = _db.Chickens.FirstOrDefault(c => c.Id == id);
         if (chicken == null)
         {
             return null;
@@ -97,7 +71,7 @@ public class ChickenService:IChickenService
     {
         var newChicken = new Chicken
         {
-            Id = ChickenList.Max(g => g.Id) + 1,
+            Id = 0,
             Name = chickenpostdto.Name,
             Date = chickenpostdto.Date,
             Height = chickenpostdto.Height,
@@ -109,7 +83,8 @@ public class ChickenService:IChickenService
             Sing = chickenpostdto.Sing,
 
         };
-        ChickenList.Add(newChicken);
+        _db.Chickens.Add(newChicken);
+        _db.SaveChanges();
         var chickenDto = new ChickenDto
         {
             Id= newChicken.Id,
@@ -129,7 +104,7 @@ public class ChickenService:IChickenService
 
     public ChickenDto? Put(int id, UpdateChickenDto chickenputdto)
     {
-        Chicken? chicken = ChickenList.FirstOrDefault(c => c.Id == id);
+        Chicken? chicken = _db.Chickens.FirstOrDefault(c => c.Id == id);
         if (chicken == null)
         {
             return null;
@@ -143,6 +118,7 @@ public class ChickenService:IChickenService
         chicken.Breed = chickenputdto.Breed;
         chicken.Sex = chickenputdto.Sex;
         chicken.Sing = chickenputdto.Sing;
+        _db.SaveChanges();
         var result = new ChickenDto()
         {
             Id = chicken.Id,
@@ -161,14 +137,14 @@ public class ChickenService:IChickenService
 
     public bool Delete(int id)
     {
-        var chicken = ChickenList.FirstOrDefault(c => c.Id == id);
+        var chicken = _db.Chickens.FirstOrDefault(c => c.Id == id);
 
         if (chicken == null)
         {
             return false;
         }
-        ChickenList.Remove(chicken);
-
+        _db.Chickens.Remove(chicken);
+        _db.SaveChanges();
         return true;
     }
 }

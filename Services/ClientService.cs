@@ -1,3 +1,4 @@
+using ChickenSystem.Data;
 using ChickenSystem.Dto.Client;
 using ChickenSystem.Models;
 
@@ -14,25 +15,15 @@ public interface IClientService
 
 public class ClientService : IClientService
 {
-    private static List<Client> _clientList =
-    [
-        new Client
-        {
-            Id = 1,
-            Name = "geovanny",
-            Email = "geovanny@hotmail.com",
-            Phone = "movistar",
-        }
-    ];
-
-    public ClientService()
+    private readonly AppDbContext _db;
+    public ClientService(AppDbContext db)
     {
+        _db = db;
     }
-
 
     public List<ClientDto> Get()
     {
-        var clientList = _clientList.Select(g => new ClientDto
+        var clientList = _db.Clients.Select(g => new ClientDto
         {
             Email = g.Email,
             Id = g.Id,
@@ -45,7 +36,7 @@ public class ClientService : IClientService
 
     public ClientDto? GetById(int id)
     {
-        var client = _clientList.FirstOrDefault(c => c.Id == id);
+        var client = _db.Clients.FirstOrDefault(c => c.Id == id);
         if (client == null)
         {
             return null;
@@ -65,12 +56,13 @@ public class ClientService : IClientService
     {
         var newClient = new Client
         {
-            Id = _clientList.Max(g => g.Id) + 1,
+            Id = 0,
             Name = createClientDto.Name,
             Email = createClientDto.Email,
             Phone = createClientDto.Phone
         };
-        _clientList.Add(newClient);
+        _db.Clients.Add(newClient);
+        _db.SaveChanges();
         var clientDto = new ClientDto
         {
             Id = newClient.Id,
@@ -83,7 +75,7 @@ public class ClientService : IClientService
 
     public ClientDto? Put(int id, UpdateClientDto updateClientDto)
     {
-        var client = _clientList.FirstOrDefault(c => c.Id == id);
+        var client = _db.Clients.FirstOrDefault(c => c.Id == id);
         if (client == null)
         {
             return null;
@@ -92,7 +84,7 @@ public class ClientService : IClientService
         client.Name = updateClientDto.Name;
         client.Email = updateClientDto.Email;
         client.Phone = updateClientDto.Phone;
-
+        _db.SaveChanges();
         var result = new ClientDto()
         {
             Name = client.Name,
@@ -104,13 +96,13 @@ public class ClientService : IClientService
 
     public bool Delete(int id)
     {
-        var client = _clientList.FirstOrDefault(n => n.Id == id);
+        var client = _db.Clients.FirstOrDefault(n => n.Id == id);
         if (client == null)
         {
             return false;
         }
 
-        _clientList.Remove(client);
+        _db.Clients.Remove(client);
 
         return true;
     }

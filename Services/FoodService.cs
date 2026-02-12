@@ -1,3 +1,4 @@
+using ChickenSystem.Data;
 using ChickenSystem.Dto.Food;
 using ChickenSystem.Models;
 
@@ -15,24 +16,15 @@ public interface IFoodService
 
 public class FoodService : IFoodService
 {
-    private static readonly List<Food> FoodList =
-    [
-        new Food
-        {
-            Id = 1,
-            Name = "ave",
-            Description = "descripcionn",
-            ImageUrl = "imagen"
-        },
-    ];
-
-    public FoodService()
+    private readonly AppDbContext _db;
+    public FoodService(AppDbContext db)
     {
+        _db = db;
     }
 
     public List<FoodDto> GetFoods()
     {
-        var foods = FoodList.Select(g => new FoodDto
+        var foods = _db.Foods.Select(g => new FoodDto
         {
             Id = g.Id,
             Name = g.Name,
@@ -44,7 +36,7 @@ public class FoodService : IFoodService
 
     public List<FoodDto> GetByName(string name)
     {
-        var foods = FoodList.Where(g => g.Name.Contains(name)).Select(g => new FoodDto
+        var foods = _db.Foods.Where(g => g.Name.Contains(name)).Select(g => new FoodDto
         {
             Id = g.Id,
             Name = g.Name,
@@ -56,7 +48,7 @@ public class FoodService : IFoodService
 
     public FoodDto? GetById(int id)
     {
-        var food = FoodList.FirstOrDefault(c => c.Id == id);
+        var food = _db.Foods.FirstOrDefault(c => c.Id == id);
         if (food == null)
         {
             return null;
@@ -76,12 +68,13 @@ public class FoodService : IFoodService
     {
         var newFood = new Food
         {
-            Id = FoodList.Max(g => g.Id) + 1,
+            Id = 0,
             Name = createFoodDto.Name,
             Description = createFoodDto.Description,
             ImageUrl = createFoodDto.ImageUrl,
         };
-        FoodList.Add(newFood);
+        _db.Foods.Add(newFood);
+        _db.SaveChanges();
         var foodDto = new FoodDto
         {
             Id = newFood.Id,
@@ -94,7 +87,7 @@ public class FoodService : IFoodService
 
     public FoodDto? Put(int id, UpdateFoodDto updateFoodDto)
     {
-        Food? food = FoodList.FirstOrDefault(c => c.Id == id);
+        Food? food = _db.Foods.FirstOrDefault(c => c.Id == id);
         if (food == null)
         {
             return null;
@@ -102,6 +95,7 @@ public class FoodService : IFoodService
         food.Name = updateFoodDto.Name;
         food.Description = updateFoodDto.Description;
         food.ImageUrl = updateFoodDto.ImageUrl;
+        _db.SaveChanges();
         var result = new FoodDto()
         {
             Id = food.Id,
@@ -114,14 +108,14 @@ public class FoodService : IFoodService
 
     public bool Delete(int id)
     {
-        var food = FoodList.FirstOrDefault(c => c.Id == id);
+        var food = _db.Foods.FirstOrDefault(c => c.Id == id);
 
         if (food == null)
         {
             return false;
         }
 
-        FoodList.Remove(food);
+        _db.Foods.Remove(food);
 
         return true;
     }

@@ -1,5 +1,7 @@
 
+using ChickenSystem.Data;
 using ChickenSystem.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChickenSystem
 {
@@ -8,7 +10,11 @@ namespace ChickenSystem
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            //db
+            var connectionString = builder.Configuration.GetConnectionString("Postgres");
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(connectionString));
+            
             // Add services to the container.
 
             builder.Services.AddControllers();
