@@ -99,7 +99,6 @@ public class FoodService : IFoodService
         {
             return null;
         }
-
         food.Name = updateFoodDto.Name;
         food.Description = updateFoodDto.Description;
         food.ImageUrl = updateFoodDto.ImageUrl;

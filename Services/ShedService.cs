@@ -100,7 +100,6 @@ public class ShedService:IShedService
             shed.Name = updateShedDto.Name;
             shed.Color = updateShedDto.Color;
             shed.Active = updateShedDto.Active;
-            ShedList.Remove(shed);
             var result = new ShedDto()
             {
                 Id = shed.Id,
