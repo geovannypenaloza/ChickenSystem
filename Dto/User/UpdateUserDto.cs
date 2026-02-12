@@ -1,8 +1,7 @@
-namespace ChickenSystem.Models;
+﻿namespace ChickenSystem.Dto.User;
 
-public class User
+public class UpdateUserDto
 {
-    public int Id { get; set; }
     public required string Name { get; set; }
     public required int Age { get; set; }
     public required string Gender { get; set; }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ChickenSystem.Models;
-using ChickenSystem.Dto;
+using ChickenSystem.Dto.Chicken;
 using ChickenSystem.Services;
 
 namespace ChickenSystem.Controllers

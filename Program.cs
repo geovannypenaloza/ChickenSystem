@@ -18,6 +18,8 @@ namespace ChickenSystem
             builder.Services.AddScoped<IChickenService, ChickenService>();
             builder.Services.AddScoped<IClientService,ClientService>();
             builder.Services.AddScoped<IFoodService, FoodService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IShedService, ShedService>();
 
             var app = builder.Build();
 

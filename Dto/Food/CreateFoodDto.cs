@@ -1,8 +1,8 @@
-namespace ChickenSystem.Dto
+namespace ChickenSystem.Dto.Food
 {
-    public class FoodDto
+    public class CreateFoodDto
     {
-        public int Id { get; set; }
+        
         public required string Name { get; set; }
         public required string Description { get; set; }
         public required string ImageUrl { get; set; }

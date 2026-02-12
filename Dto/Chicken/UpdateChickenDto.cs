@@ -1,4 +1,4 @@
-﻿namespace ChickenSystem.Dto
+﻿namespace ChickenSystem.Dto.Chicken
 {
     public class UpdateChickenDto
     {

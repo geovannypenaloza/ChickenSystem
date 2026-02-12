@@ -1,4 +1,4 @@
-using ChickenSystem.Dto;
+using ChickenSystem.Dto.Food;
 using ChickenSystem.Models;
 
 namespace ChickenSystem.Services;

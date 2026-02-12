@@ -1,4 +1,4 @@
-using ChickenSystem.Dto;
+using ChickenSystem.Dto.Chicken;
 using ChickenSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 
