@@ -4,7 +4,7 @@ using ChickenSystem.Models;
 
 
 namespace ChickenSystem.Services;
-
+//interface
 public interface IChickenService
 {
     public List<ChickenDto> GetChickens();
@@ -13,20 +13,20 @@ public interface IChickenService
     public ChickenDto? Put(int id, UpdateChickenDto updateChickenDto);
     public bool Delete(int id);
 }
-
+//services
 public class ChickenService:IChickenService
 {
     private readonly AppDbContext _db;
-    
-    public ChickenService(AppDbContext db)
+    private readonly ILogger<ChickenService> _logger; //logger interface
+    private readonly IFoodService _foodService;
+    public ChickenService(AppDbContext db, ILogger<ChickenService> logger, IFoodService foodService)
     {
         _db = db;
+        _logger = logger;
+        _foodService = foodService;
     }
-    
-
     public List<ChickenDto> GetChickens()
     {
-        
         var chickens = _db.Chickens.Select(g => new ChickenDto
         {
             Id = g.Id,
@@ -41,6 +41,7 @@ public class ChickenService:IChickenService
             Sing = g.Sing,
 
         }).ToList();
+        _logger.LogInformation("hola");
         return chickens;
     }
 

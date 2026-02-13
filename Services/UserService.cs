@@ -17,9 +17,11 @@ public interface IUserService
 public class UserService : IUserService
 {
     private readonly  AppDbContext _db;
-    public UserService(AppDbContext db)
+    private readonly  ILogger<UserService> _logger;
+    public UserService(AppDbContext db, ILogger<UserService> logger)
     {
         _db = db;
+        _logger = logger;
     }
 
     public List<UserDto> GetUsers()

@@ -17,10 +17,12 @@ public interface IShedService
 public class ShedService : IShedService
 {
     private readonly AppDbContext _db;
+    private readonly  ILogger<ShedService> _logger;
 
-    public ShedService(AppDbContext db)
+    public ShedService(AppDbContext db, ILogger<ShedService> logger)
     {
         _db = db;
+        _logger= logger;
     }
 
     public List<ShedDto> GetSheds()

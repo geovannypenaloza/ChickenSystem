@@ -1,5 +1,6 @@
 
 using ChickenSystem.Data;
+using ChickenSystem.Hubs;
 using ChickenSystem.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,8 +16,8 @@ namespace ChickenSystem
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(connectionString));
             
-            // Add services to the container.
-
+            // Add services to the container. signalR
+            builder.Services.AddSignalR();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -36,6 +37,7 @@ namespace ChickenSystem
                 app.UseSwaggerUI();
             }
             app.UseAuthorization();
+            app.MapHub<ChickenHub>("/chickenhub");
             app.MapControllers();
             app.Run();
         }

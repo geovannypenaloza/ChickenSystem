@@ -16,9 +16,11 @@ public interface IClientService
 public class ClientService : IClientService
 {
     private readonly AppDbContext _db;
-    public ClientService(AppDbContext db)
+    private readonly  ILogger<ClientService> _logger;
+    public ClientService(AppDbContext db, ILogger<ClientService> logger)
     {
         _db = db;
+        _logger = logger;
     }
 
     public List<ClientDto> Get()

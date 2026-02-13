@@ -17,9 +17,13 @@ public interface IFoodService
 public class FoodService : IFoodService
 {
     private readonly AppDbContext _db;
-    public FoodService(AppDbContext db)
+    private readonly  ILogger<FoodService> _logger;
+    private readonly IShedService _shedService;
+    public FoodService(AppDbContext db, ILogger<FoodService> logger, IShedService shedService)
     {
         _db = db;
+        _logger = logger;
+        _shedService = shedService;
     }
 
     public List<FoodDto> GetFoods()
